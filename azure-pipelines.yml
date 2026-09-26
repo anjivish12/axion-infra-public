@@ -1,0 +1,78 @@
+trigger: 
+
+- main
+
+pool: anjali
+
+stages:
+
+# - stage: init
+#   displayName: Init stage
+#   jobs:
+#   - job: Init
+#     displayName: Init Job
+#     steps:
+#     - task: TerraformInstaller@1
+#       displayName: Install 
+#       inputs:
+#         terraformVersion: '1.16.3'
+#     - task: TerraformTask@5
+#       displayName: Init
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'init'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)\parent_module'
+#         backendServiceArm: 'axion'
+#         backendAzureRmStorageAccountName: 'stg123anjali'
+#         backendAzureRmContainerName: 'con'
+#         backendAzureRmKey: 'terraform.tfstate'
+
+# - stage: planning
+#   displayName: planning stage
+#   jobs:
+#   - job: planning
+#     displayName: plan
+#     steps:
+#     - task: TerraformTask@5
+#       displayName: plan
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'init'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)\parent_module'
+#         backendServiceArm: 'axion'
+#         backendAzureRmStorageAccountName: 'stg123anjali'
+#         backendAzureRmContainerName: 'con'
+#         backendAzureRmKey: 'terraform.tfstate'
+
+#     - task: TerraformTask@5
+#       displayName: plan
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'plan'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)\parent_module'
+#         environmentServiceNameAzureRM: 'axion'
+
+- stage: apply 
+  displayName: apply
+  jobs:
+  - job: apply
+    displayName: apply
+    steps:
+    - task: TerraformTask@5
+      displayName: Init
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)\parent_module'
+        backendServiceArm: 'axion'
+        backendAzureRmStorageAccountName: 'stg123anjali'
+        backendAzureRmContainerName: 'con'
+        backendAzureRmKey: 'terraform.tfstate'
+    
+    - task: TerraformTask@5
+      displayName: Apply
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: '$(System.DefaultWorkingDirectory)\parent_module'
+        environmentServiceNameAzureRM: 'axion'
